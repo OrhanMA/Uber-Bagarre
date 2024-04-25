@@ -38,8 +38,7 @@ class FightFixtures extends Fixture implements DependentFixtureInterface
       $user = new User();
       $user->setUsername($this->faker->userName());
       $user->setEmail($this->faker->email());
-      $user->setRoles(['ROLE_ADMIN']);
-      $user->setPassword($this->passwordHasher->hashPassword($user, $this->faker->password()));
+      $user->setPassword($this->passwordHasher->hashPassword($user, 'test1234'));
       $user->setCreatedAt(new \DateTimeImmutable());
 
       $manager->persist($user);
