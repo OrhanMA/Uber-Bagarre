@@ -3,10 +3,6 @@ import Link from "next/link";
 
 const links = [
   {
-    route: "",
-    text: "Uber Bagarre",
-  },
-  {
     route: "about",
     text: "About",
   },
@@ -32,7 +28,7 @@ export default function Footer() {
           return (
             <Link
               key={index}
-              className="hidden text-foreground/60 transition-colors hover:text-foreground/80 sm:block"
+              className="hidden text-foreground/60 transition-colors hover:text-foreground/80 sm:block text-sm"
               href={"/" + link.route}
             >
               {link.text}

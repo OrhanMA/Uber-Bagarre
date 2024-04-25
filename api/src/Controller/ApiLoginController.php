@@ -21,6 +21,8 @@ class ApiLoginController extends AbstractController
     {
         $body = json_decode($request->getContent());
 
+
+
         $username = $body->username;
         $plainPassword = $body->password;
 
@@ -37,7 +39,9 @@ class ApiLoginController extends AbstractController
         $passwordValid = $passwordHasher->isPasswordValid($user, $plainPassword);
 
         if (!$passwordValid) {
-            //
+            return $this->json([
+                'message' => 'invalid credentials',
+            ], Response::HTTP_UNAUTHORIZED);
         }
 
         $token = $JWTManager->create($user);

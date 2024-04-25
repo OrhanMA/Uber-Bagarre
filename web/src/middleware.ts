@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
 
   const jwtToken = request.cookies.get("jwtToken");
 
-  console.log("JWT token is: ", jwtToken);
+  console.log("MIDDLEWARE JWT token is: ", jwtToken);
 
   if (!jwtToken) {
     // NextRequest.js depuis la v12.1 recommande de cloner l'url

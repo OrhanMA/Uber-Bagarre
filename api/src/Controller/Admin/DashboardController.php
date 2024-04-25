@@ -75,6 +75,6 @@ class DashboardController extends AbstractDashboardController
 
     public function configureCrud(): Crud
     {
-        return Crud::new()->setEntityPermission('ROLE_ADMIN')->setPaginatorPageSize(20)->setPaginatorRangeSize(3)->hideNullValues();
+        return Crud::new()->setEntityPermission('ROLE_ADMIN')->setPaginatorPageSize(20)->setPaginatorRangeSize(3);
     }
 }

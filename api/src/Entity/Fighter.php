@@ -11,40 +11,58 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FighterRepository::class)]
-#[ApiResource]
+#[ApiResource(normalizationContext: ['groups' => ['fighter']])]
+#[Get]
+#[GetCollection]
+#[Put(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Post(security: "is_granted('ROLE_ADMIN')")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Vich\Uploadable]
 class Fighter
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('fighter')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Groups('fighter')]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups('fighter')]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Groups('fighter')]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('fighter')]
     private ?\DateTimeImmutable $updated_at = null;
 
     /**
      * @var Collection<int, Fight>
      */
     #[ORM\ManyToMany(targetEntity: Fight::class, mappedBy: 'fighters')]
+    #[Groups('fighter')]
     private Collection $fights;
 
     /**
      * @var Collection<int, Skill>
      */
     #[ORM\ManyToMany(targetEntity: Skill::class, inversedBy: 'fighters')]
+    #[Groups('fighter')]
     private Collection $skills;
 
     // NOTE: This is not a mapped field of entity metadata, just a simple property.
@@ -53,6 +71,7 @@ class Fighter
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('fighter')]
     private ?string $imageName = null;
 
     #[ORM\Column(nullable: true)]

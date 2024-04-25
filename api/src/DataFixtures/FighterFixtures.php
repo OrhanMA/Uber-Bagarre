@@ -81,7 +81,8 @@ class FighterFixtures extends Fixture implements DependentFixtureInterface
       $newFighter->setName($fighter['name']);
       $newFighter->setDescription($fighter['description']);
       $newFighter->setCreatedAt(new \DateTimeImmutable());
-      $newFighter->setImageName("/public/images/" . $fighter['imagePath'] . ".webp");
+      // $newFighter->setImageName("/public/images/" . $fighter['imagePath'] . ".webp");
+      $newFighter->setImageName("fighter-662a82a0900b1394283995.jpeg");
       $newFighter->addSkill($this->getReference('skill_' . $this->faker->numberBetween(0, 18)));
       $manager->persist($newFighter);
       $this->addReference('fighter_' . $key, $newFighter);
