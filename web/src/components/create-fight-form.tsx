@@ -165,14 +165,14 @@ export default function CreateFightForm() {
               </FormItem>
             )}
           />
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <FormLabel>Fight location</FormLabel>
             <Muted>
               Click on the map to set your position then use the draggable
               marker to set a more precise position
             </Muted>
             <MapContainer
-              className=" w-[90vw] h-[300px]"
+              className="w-full h-[300px]"
               // style={{ height: "200px", width: "100vw" }}
               center={position}
               zoom={13}
@@ -208,46 +208,46 @@ export default function CreateFightForm() {
               </FormItem>
             )}
           /> */}
-          <FormField
-            control={form.control}
-            name="fighting"
-            render={({ field }) => (
-              <FormItem className="flex min-w-[400px] w-fit flex-row items-center justify-between rounded-lg border p-4">
-                <div className="space-y-0.5">
-                  <FormLabel className="text-base">Fighting</FormLabel>
-                  <FormDescription>
-                    Select if you will be fighting with our guys
-                  </FormDescription>
-                </div>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="cover"
-            render={({ field }) => (
-              <FormItem className="flex min-w-[400px] w-fit flex-row items-center justify-between rounded-lg border p-4">
-                <div className="space-y-0.5">
-                  <FormLabel className="text-base">Cover</FormLabel>
-                  <FormDescription>
-                    Select if fighters will need to cover their faces
-                  </FormDescription>
-                </div>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+          <div className="flex flex-wrap gap-6">
+            <FormField
+              control={form.control}
+              name="fighting"
+              render={({ field }) => (
+                <FormItem className="flex min-w-[275px] grow w-fit flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">
+                      I&apos;m fighting
+                    </FormLabel>
+                    <FormDescription>Are you also fighting</FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="cover"
+              render={({ field }) => (
+                <FormItem className="flex min-w-[275px] grow w-fit flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">Anonymous fight</FormLabel>
+                    <FormDescription>Select for anonymity</FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
           <Button type="submit">Request fight</Button>
         </form>
       </Form>
