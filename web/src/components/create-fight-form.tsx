@@ -16,12 +16,20 @@ import { Switch } from "@/components/ui/switch";
 import { z } from "zod";
 import Head from "next/head";
 import Script from "next/script";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet/dist/leaflet.js";
 
 import { Icon } from "leaflet";
-import { useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { Muted } from "./typograhpy";
 
 const defaultIcon = new Icon({
   iconUrl:
@@ -45,17 +53,23 @@ const fightSchema = z.object({
     .number({ message: "Pick a number between 1 and 10" })
     .min(1)
     .max(10),
-  address: z
-    .string({
-      message: "The place where the fight is going to happen",
-    })
-    .max(255),
+  // address: z
+  //   .string({
+  //     message: "The place where the fight is going to happen",
+  //   })
+  //   .max(255),
   fighting: z.boolean().default(true).optional(),
   cover: z.boolean().default(false).optional(),
 });
 
 export default function CreateFightForm() {
   const [position, setPosition] = useState<[number, number]>([51.505, -0.09]);
+  const [finalPosition, setFinalPosition] = useState<[number, number] | null>(
+    null
+  );
+
+  console.log(finalPosition);
+
   // 1. Define your form
   const form = useForm<z.infer<typeof fightSchema>>({
     resolver: zodResolver(fightSchema),
@@ -63,7 +77,7 @@ export default function CreateFightForm() {
       title: "test1234",
       message: "Here is a description",
       fighters_needed: 4,
-      address: "34 Avenue de l'Europe, 38000 Grenoble",
+      // address: "34 Avenue de l'Europe, 38000 Grenoble",
       fighting: true,
       cover: false,
     },
@@ -74,7 +88,23 @@ export default function CreateFightForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
-    // const response = signup(values);
+
+    const response = await fetch(
+      `https://api.mapbox.com/search/geocode/v6/reverse?longitude=${position[1]}&latitude=${position[0]}&access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`
+    );
+    const data = await response.json();
+    console.log(data);
+
+    const address = data.features[0].properties.full_address;
+
+    console.log(address);
+
+    const finalData = {
+      ...values,
+      address: address || "unknown",
+    };
+
+    // const response = await createFight(finalData);
     // const data = await response;
     // console.log(data);
   }
@@ -135,22 +165,30 @@ export default function CreateFightForm() {
               </FormItem>
             )}
           />
-          <MapContainer
-            className=" w-[90vw] h-[300px]"
-            // style={{ height: "200px", width: "100vw" }}
-            center={position}
-            zoom={13}
-            scrollWheelZoom={false}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker icon={defaultIcon} position={position}>
+          <div className="flex flex-col gap-2">
+            <FormLabel>Fight location</FormLabel>
+            <Muted>
+              Click on the map to set your position then use the draggable
+              marker to set a more precise position
+            </Muted>
+            <MapContainer
+              className=" w-[90vw] h-[300px]"
+              // style={{ height: "200px", width: "100vw" }}
+              center={position}
+              zoom={13}
+              scrollWheelZoom={false}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {/* <Marker icon={defaultIcon} position={position}>
               <Popup>Fight location</Popup>
-            </Marker>
-          </MapContainer>
-          <FormField
+            </Marker> */}
+              <LocationMarker setFinalPosition={setFinalPosition} />
+            </MapContainer>
+          </div>
+          {/* <FormField
             control={form.control}
             name="address"
             render={({ field }) => (
@@ -169,7 +207,7 @@ export default function CreateFightForm() {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
           <FormField
             control={form.control}
             name="fighting"
@@ -214,5 +252,56 @@ export default function CreateFightForm() {
         </form>
       </Form>
     </div>
+  );
+}
+
+function LocationMarker({ setFinalPosition }: { setFinalPosition: any }) {
+  const [draggable, setDraggable] = useState(false);
+  const [position, setPosition] = useState(null);
+
+  const map = useMapEvents({
+    click() {
+      map.locate();
+    },
+    locationfound(e: any) {
+      setPosition(e.latlng);
+      setFinalPosition([e.latlng.lat, e.latlng.lng]);
+      map.flyTo(e.latlng, map.getZoom());
+    },
+  });
+
+  const markerRef = useRef(null);
+  const eventHandlers = useMemo(
+    () => ({
+      dragend() {
+        const marker: any = markerRef.current;
+        if (marker != null) {
+          setPosition(marker.getLatLng());
+          setFinalPosition([marker.getLatLng().lat, marker.getLatLng().lng]);
+        }
+      },
+    }),
+    []
+  );
+  const toggleDraggable = useCallback(() => {
+    setDraggable((d) => !d);
+  }, []);
+  return position === null ? null : (
+    <Marker
+      icon={defaultIcon}
+      position={position}
+      draggable={draggable}
+      eventHandlers={eventHandlers}
+      ref={markerRef}
+    >
+      <Popup>
+        {" "}
+        <span onClick={toggleDraggable}>
+          {draggable
+            ? "Marker is draggable"
+            : "Click here to make marker draggable"}
+        </span>
+      </Popup>
+    </Marker>
   );
 }
