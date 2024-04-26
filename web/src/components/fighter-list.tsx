@@ -19,8 +19,8 @@ import { getFighters } from "@/app/actions";
 import { FigtherInterface } from "@/types";
 
 export default async function FighterList() {
-  const sleep = (ms: any) => new Promise((r) => setTimeout(r, ms));
-  await sleep(1000);
+  // const sleep = (ms: any) => new Promise((r) => setTimeout(r, ms));
+  // await sleep(3000);
   const data: any = await getFighters();
   console.log(data);
 
@@ -58,7 +58,10 @@ export default async function FighterList() {
                     {fighter.description}
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
-                    <Badge className="text-xs" variant="default">
+                    <Badge
+                      className="text-xs w-[100px] flex justify-center"
+                      variant="default"
+                    >
                       {fighter.skills.map((skill: any, index) => {
                         return (
                           <P className="truncate" key={index}>

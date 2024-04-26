@@ -6,8 +6,14 @@ export function middleware(request: NextRequest) {
   const route = url.pathname;
   console.log(route);
 
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-hello-from-middleware1", "hello");
+  if (route === "/logout") {
+    const response = NextResponse.redirect(new URL("/signin", url.clone()));
+    response.cookies.delete("jwtToken");
+    return response;
+  }
+
+  // const requestHeaders = new Headers(request.headers);
+  // requestHeaders.set("x-hello-from-middleware1", "hello");
 
   const jwtToken = request.cookies.get("jwtToken");
 

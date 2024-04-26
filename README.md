@@ -18,3 +18,7 @@ Procédure à expliquer pour l'installation:
 - démarrage des deux serveurs
 
 Lister les bundles / libraires / frameworks / services / api utilisé(e)s
+
+Images used:
+
+- https://unsplash.com/fr/photos/femme-en-robe-bleue-tenant-un-cheval-blanc-wjqFQQQdIe4

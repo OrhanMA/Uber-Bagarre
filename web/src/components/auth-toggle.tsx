@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function AuthToggle() {
+export function AuthToggle({ authenticated }: { authenticated: boolean }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -22,12 +22,22 @@ export function AuthToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <Link href={"/signin"}>
-          <DropdownMenuItem>Sign in</DropdownMenuItem>
-        </Link>
-        <Link href={"/signup"}>
-          <DropdownMenuItem>Sign Up</DropdownMenuItem>
-        </Link>
+        {authenticated ? (
+          <>
+            <Link href={"/logout"}>
+              <DropdownMenuItem>Log out</DropdownMenuItem>
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link href={"/signin"}>
+              <DropdownMenuItem>Sign in</DropdownMenuItem>
+            </Link>
+            <Link href={"/signup"}>
+              <DropdownMenuItem>Sign Up</DropdownMenuItem>
+            </Link>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
