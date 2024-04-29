@@ -17,7 +17,7 @@ import {
 
 export function Nav() {
   return (
-    <NavigationMenu className="w-full">
+    <NavigationMenu className="w-full z-100">
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
@@ -56,10 +56,10 @@ export function Nav() {
           <NavigationMenuTrigger>Fights</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              <ListItem title="Need a fight" href="/fight/create">
+              <ListItem title="Need a fight" href="/fights/create">
                 Ask for fighters
               </ListItem>
-              <ListItem title="My fights" href="/fight/requests">
+              <ListItem title="My fights" href="/fights">
                 See your fights requests
               </ListItem>
               <ListItem title="Fighters" href="/fighters">

@@ -3,9 +3,10 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { FightData } from "@/types";
 
 export async function login(values: { username: string; password: string }) {
-  console.log(values);
+  // console.log(values);
 
   try {
     const response = await fetch("http://localhost:8000/api/login", {
@@ -17,6 +18,7 @@ export async function login(values: { username: string; password: string }) {
     });
 
     const data = await response.json();
+
     console.log(data);
 
     // si c'est la réponse 401 Invalid credentials de Symfony
@@ -26,7 +28,9 @@ export async function login(values: { username: string; password: string }) {
 
     const token = data.token;
     cookies().set("jwtToken", token);
-    console.log(token);
+    console.log("USER FROM SIGNIN", data.user_id);
+    cookies().set("user_id", data.user_id);
+    // console.log(token);
     // set token in nextjs cookies, redirect to another page
   } catch (error) {
     console.error("Error trying to authenticate: ", error);
@@ -40,7 +44,7 @@ export async function signup(values: {
   email: string;
   password: string;
 }) {
-  console.log(values);
+  // console.log(values);
 
   try {
     const response = await fetch("http://localhost:8000/api/register", {
@@ -52,7 +56,7 @@ export async function signup(values: {
     });
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
 
     // si c'est la réponse 401 Invalid credentials de Symfony
     if (!response.ok) {
@@ -61,7 +65,9 @@ export async function signup(values: {
 
     const token = data.token;
     cookies().set("jwtToken", token);
-    console.log(token);
+
+    cookies().set("user_id", data.user_id);
+    // console.log(token);
     // set token in nextjs cookies, redirect to another page
   } catch (error) {
     console.error("Error trying to authenticate: ", error);
@@ -72,7 +78,7 @@ export async function signup(values: {
 
 export async function getFighters() {
   const token = cookies().get("jwtToken")?.value;
-  console.log("FROM FIGHTERS TOKEN: ", token);
+  // console.log("FROM FIGHTERS TOKEN: ", token);
 
   const response = await fetch("http://localhost:8000/api/fighters", {
     method: "GET",
@@ -81,6 +87,42 @@ export async function getFighters() {
       "Authorization": `Bearer ${token}`,
     }),
   });
+  const data = await response.json();
+  return data;
+}
+
+export async function createFight(fightData: any) {
+  fightData.user = "api/users/" + cookies().get("user_id")?.value;
+  const response = await fetch("http://localhost:8000/api/fights", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/ld+json",
+    },
+    body: JSON.stringify(fightData),
+  });
+
+  if (!response.ok) {
+    const data = await response.json();
+    return data;
+  }
+  revalidatePath("/fights");
+  redirect("/fights");
+}
+
+export async function getUserFights() {
+  const response = await fetch(
+    `http://localhost:8000/api/fights?user.id=${
+      cookies().get("user_id")?.value
+    }`
+  );
+  const data = await response.json();
+  // console.log(data);
+  return data;
+}
+
+export async function getFight(id: number) {
+  const response = await fetch("http://localhost:8000/api/fights/" + id);
+
   const data = await response.json();
   return data;
 }

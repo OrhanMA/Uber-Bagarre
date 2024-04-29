@@ -48,6 +48,7 @@ class ApiLoginController extends AbstractController
         $token = $JWTManager->create($user);
 
         return $this->json([
+            'user_id' => $user->getId(),
             'username'  => $user->getUserIdentifier(),
             'token' => $token,
         ]);
@@ -126,6 +127,8 @@ class ApiLoginController extends AbstractController
 
         return $this->json([
             'message' => 'Account created',
+            'user_id' => $user->getId(),
+            'username'  => $user->getUserIdentifier(),
             'token' => $token
         ], Response::HTTP_CREATED);
     }

@@ -8,3 +8,13 @@ export interface FigtherInterface {
   fight: string[];
   skills: string[];
 }
+
+export interface FightData {
+  id: number;
+  title: string;
+  message: string;
+  fighters_needed: number;
+  fighting: boolean;
+  cover: boolean;
+  address: string;
+}

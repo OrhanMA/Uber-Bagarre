@@ -10,7 +10,6 @@ export default async function Fighters() {
     <div>
       <H1>Our fighters</H1>
       <Suspense fallback={<FakeFighterList />}>
-        {/* @ts-expect-error Server Component */}
         <FighterList />
       </Suspense>
     </div>

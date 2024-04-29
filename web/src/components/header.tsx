@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 export default function Header() {
   const token = cookies().get("jwtToken")?.value;
 
-  console.log("TOKEN FROM HEADER", token);
+  // console.log("TOKEN FROM HEADER", token);
 
   return (
     <header className="flex items-center p-4 justify-between sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

@@ -4,11 +4,12 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const url = request.nextUrl;
   const route = url.pathname;
-  console.log(route);
+  // console.log(route);
 
   if (route === "/logout") {
     const response = NextResponse.redirect(new URL("/signin", url.clone()));
     response.cookies.delete("jwtToken");
+    response.cookies.delete("user_id");
     return response;
   }
 
@@ -17,7 +18,7 @@ export function middleware(request: NextRequest) {
 
   const jwtToken = request.cookies.get("jwtToken");
 
-  console.log("MIDDLEWARE JWT token is: ", jwtToken);
+  // console.log("MIDDLEWARE JWT token is: ", jwtToken);
 
   if (!jwtToken) {
     // NextRequest.js depuis la v12.1 recommande de cloner l'url

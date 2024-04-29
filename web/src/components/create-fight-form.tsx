@@ -26,12 +26,12 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet/dist/leaflet.js";
-
 import { Icon } from "leaflet";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Muted } from "./typograhpy";
+import { createFight } from "@/app/actions";
 
-const defaultIcon = new Icon({
+export const defaultIcon = new Icon({
   iconUrl:
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
   iconSize: [25, 41],
@@ -40,7 +40,7 @@ const defaultIcon = new Icon({
   shadowSize: [41, 41],
 });
 
-const fightSchema = z.object({
+export const fightSchema = z.object({
   title: z
     .string({ message: "A short resume of what is it all about" })
     .min(2)
@@ -90,23 +90,26 @@ export default function CreateFightForm() {
     console.log(values);
 
     const response = await fetch(
-      `https://api.mapbox.com/search/geocode/v6/reverse?longitude=${position[1]}&latitude=${position[0]}&access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`
+      `https://api.mapbox.com/search/geocode/v6/reverse?longitude=${finalPosition[1]}&latitude=${finalPosition[0]}&access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`
     );
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
 
     const address = data.features[0].properties.full_address;
 
-    console.log(address);
+    // console.log(address);
 
     const finalData = {
       ...values,
+      // address: "24 Avenue Daniel Rops, 73000 Chambéry",
       address: address || "unknown",
     };
 
-    // const response = await createFight(finalData);
-    // const data = await response;
-    // console.log(data);
+    console.log(finalData);
+
+    const postResponse = await createFight(finalData);
+    // const responseData = await postResponse.json();
+    // console.log(responseData);
   }
   return (
     <div>
@@ -248,7 +251,9 @@ export default function CreateFightForm() {
               )}
             />
           </div>
-          <Button type="submit">Request fight</Button>
+          <Button type="submit" disabled={finalPosition == null ? true : false}>
+            Request fight
+          </Button>
         </form>
       </Form>
     </div>
@@ -281,7 +286,7 @@ function LocationMarker({ setFinalPosition }: { setFinalPosition: any }) {
         }
       },
     }),
-    []
+    [setFinalPosition]
   );
   const toggleDraggable = useCallback(() => {
     setDraggable((d) => !d);

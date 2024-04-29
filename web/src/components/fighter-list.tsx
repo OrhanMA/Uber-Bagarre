@@ -19,13 +19,13 @@ import { getFighters } from "@/app/actions";
 import { FigtherInterface } from "@/types";
 
 export default async function FighterList() {
-  // const sleep = (ms: any) => new Promise((r) => setTimeout(r, ms));
-  // await sleep(3000);
+  const sleep = (ms: any) => new Promise((r) => setTimeout(r, ms));
+  await sleep(2000);
   const data: any = await getFighters();
-  console.log(data);
+  // console.log(data);
 
   const fighters: FigtherInterface[] = data["hydra:member"];
-  console.log(fighters);
+  // console.log(fighters);
 
   return (
     <Card className="mt-10">

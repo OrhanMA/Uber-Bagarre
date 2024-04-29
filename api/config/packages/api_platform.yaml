@@ -11,6 +11,7 @@ api_platform:
     html: ["text/html"]
   defaults:
     stateless: true
+    pagination_items_per_page: 5 # Par défaut 30, j'ai mis à 5 pour pas avoir besoin de trop de fixtures
     cache_headers:
       vary: ["Content-Type", "Authorization", "Origin"]
     extra_properties:

@@ -2,69 +2,89 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\FightRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: FightRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['user.id' => 'exact'])]
 class Fight
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Groups(['read', "write"])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['read', "write"])]
     private ?string $message = null;
 
     #[ORM\Column]
+    #[Groups(['read', "write"])]
     private ?int $fighters_needed = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['read', "write"])]
     private ?string $address = null;
 
     #[ORM\Column]
-    private ?bool $is_fighting = null;
+    #[Groups(['read', "write"])]
+    private ?bool $is_fighting = false;
 
     #[ORM\Column]
+    #[Groups(['read', "write"])]
     private ?bool $cover = null;
 
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['read'])]
     private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'fights')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read', "write"])]
     private ?User $user = null;
 
     /**
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'fights')]
+    #[Groups(['read', "write"])]
     private Collection $categories;
 
     /**
      * @var Collection<int, Fighter>
      */
     #[ORM\ManyToMany(targetEntity: Fighter::class, inversedBy: 'fights')]
+    #[Groups(['read', "write"])]
     private Collection $fighters;
 
     public function __construct()
     {
         $this->categories = new ArrayCollection();
         $this->fighters = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
