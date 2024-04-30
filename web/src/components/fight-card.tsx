@@ -26,7 +26,7 @@ export function FightCard({ fight }: { fight: FightData }) {
         <Link href={"/fights/" + fight.id}>
           <Button>See details</Button>
         </Link>
-        <Link href={"/fights/update/" + fight.id}>
+        <Link href={"/fights/" + fight.id + "/update"}>
           <Button variant={"secondary"}>Update</Button>
         </Link>
       </CardFooter>
@@ -50,8 +50,10 @@ export async function FightDetailsCard({ fight }: { fight: FightData }) {
         </div>
       </CardContent>
       <CardFooter className="flex gap-4">
-        <Link href={"/fights/update/" + fight.id}>
+        <Link href={"/fights/" + fight.id + "/update"}>
           <Button variant={"secondary"}>Update</Button>
+        </Link>
+        <Link href={"/fights/" + fight.id + "/delete"}>
           <Button variant={"destructive"}>Delete</Button>
         </Link>
       </CardFooter>
@@ -83,7 +85,6 @@ export function FakeFightDetailsCard() {
         </div>
       </CardContent>
       <CardFooter className="flex gap-4">
-        <Button>See details</Button>
         <Button variant={"secondary"}>Update</Button>
         <Button variant={"destructive"}>Delete</Button>
       </CardFooter>

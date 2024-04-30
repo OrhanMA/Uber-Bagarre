@@ -88,6 +88,8 @@ export async function getFighters() {
     }),
   });
   const data = await response.json();
+  // console.log(data);
+
   return data;
 }
 
@@ -109,6 +111,31 @@ export async function createFight(fightData: any) {
   redirect("/fights");
 }
 
+export async function updateFight(fightData: any, fight_id: number) {
+  fightData.user = "api/users/" + cookies().get("user_id")?.value;
+  const token = cookies().get("jwtToken")?.value;
+  console.log(fightData);
+
+  console.log("FIGHT ID IS : ", fight_id);
+
+  const response = await fetch(`http://localhost:8000/api/fights/${fight_id}`, {
+    method: "PUT",
+    headers: {
+      "Accept": "application/ld+json",
+      "Content-Type": "application/ld+json",
+    },
+    body: JSON.stringify({
+      ...fightData,
+      user: `api/users/${cookies().get("user_id")?.value}`,
+    }),
+  });
+
+  const data = await response.json();
+  console.log(data);
+  revalidatePath("/fights");
+  redirect("/fights");
+}
+
 export async function getUserFights() {
   const response = await fetch(
     `http://localhost:8000/api/fights?user.id=${
@@ -122,7 +149,6 @@ export async function getUserFights() {
 
 export async function getFight(id: number) {
   const response = await fetch("http://localhost:8000/api/fights/" + id);
-
   const data = await response.json();
   return data;
 }

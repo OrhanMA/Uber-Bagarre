@@ -4,6 +4,7 @@ import { FightData } from "@/types";
 import { FightCard } from "@/components/fight-card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 export default async function Fights() {
   const data = await getUserFights();
   console.log(data);

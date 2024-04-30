@@ -21,6 +21,7 @@ security:
     api:
       pattern: ^/api
       stateless: true
+      # entry_point: jwt
       jwt: ~
 
     dev:

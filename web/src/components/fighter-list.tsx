@@ -19,8 +19,8 @@ import { getFighters } from "@/app/actions";
 import { FigtherInterface } from "@/types";
 
 export default async function FighterList() {
-  const sleep = (ms: any) => new Promise((r) => setTimeout(r, ms));
-  await sleep(2000);
+  // const sleep = (ms: any) => new Promise((r) => setTimeout(r, ms));
+  // await sleep(2000);
   const data: any = await getFighters();
   // console.log(data);
 
@@ -50,9 +50,6 @@ export default async function FighterList() {
                 <TableRow className="hover:bg-accent" key={fighter.id}>
                   <TableCell>
                     <div className="font-medium">{fighter.name}</div>
-                    {/* <div className="hidden text-sm text-muted-foreground md:inline">
-                  liam@example.com
-                </div> */}
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
                     {fighter.description}
