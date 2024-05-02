@@ -66,7 +66,7 @@ export default function UpdateFightForm({ fight }: { fight: any }) {
   }
 
   return (
-    <div>
+    <div className="mt-10">
       <Form {...form}>
         <form
           method="PUT"

@@ -74,10 +74,7 @@ export function FakeFightDetailsCard() {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
-        <p className="mb-4">
-          {" "}
-          <div className="h-2 w-[700px] border border-border/40 bg-neutral-200 rounded"></div>
-        </p>
+        <div className="h-2 w-[700px] border border-border/40 bg-neutral-200 rounded"></div>
         <div className="flex flex-wrap gap-4">
           <Badge>cover: ?</Badge>
           <Badge>fighting: ?</Badge>

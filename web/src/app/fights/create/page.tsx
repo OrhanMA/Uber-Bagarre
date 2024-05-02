@@ -1,4 +1,3 @@
-"use client";
 import { H1, H2 } from "@/components/typograhpy";
 
 import CreateFightForm from "@/components/create-fight-form";

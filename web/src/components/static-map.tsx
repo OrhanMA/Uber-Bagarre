@@ -4,8 +4,10 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 export default function StaticMap({
   coordinates,
+  address,
 }: {
   coordinates: [number, number];
+  address: string;
 }) {
   return (
     <MapContainer
@@ -20,7 +22,7 @@ export default function StaticMap({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <Marker icon={defaultIcon} position={[coordinates[1], coordinates[0]]}>
-        <Popup>Fight location</Popup>
+        <Popup>{address}</Popup>
       </Marker>
     </MapContainer>
   );

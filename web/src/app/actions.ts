@@ -9,7 +9,7 @@ export async function login(values: { username: string; password: string }) {
   // console.log(values);
 
   try {
-    const response = await fetch("http://localhost:8000/api/login", {
+    const response = await fetch("http://localhost:8000/api/login_check", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -28,7 +28,6 @@ export async function login(values: { username: string; password: string }) {
 
     const token = data.token;
     cookies().set("jwtToken", token);
-    console.log("USER FROM SIGNIN", data.user_id);
     cookies().set("user_id", data.user_id);
     // console.log(token);
     // set token in nextjs cookies, redirect to another page
@@ -76,17 +75,20 @@ export async function signup(values: {
   redirect("/fighters");
 }
 
-export async function getFighters() {
+export async function getFighters(page: string) {
   const token = cookies().get("jwtToken")?.value;
   // console.log("FROM FIGHTERS TOKEN: ", token);
 
-  const response = await fetch("http://localhost:8000/api/fighters", {
-    method: "GET",
-    headers: new Headers({
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    }),
-  });
+  const response = await fetch(
+    "http://localhost:8000/api/fighters?page=" + page,
+    {
+      method: "GET",
+      headers: new Headers({
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      }),
+    }
+  );
   const data = await response.json();
   // console.log(data);
 
@@ -94,6 +96,8 @@ export async function getFighters() {
 }
 
 export async function createFight(fightData: any) {
+  console.log(fightData);
+
   fightData.user = "api/users/" + cookies().get("user_id")?.value;
   const response = await fetch("http://localhost:8000/api/fights", {
     method: "POST",
@@ -136,11 +140,27 @@ export async function updateFight(fightData: any, fight_id: number) {
   redirect("/fights");
 }
 
+export async function getFights(page: string) {
+  const response = await fetch(`http://localhost:8000/api/fights?page=${page}`);
+  const data = await response.json();
+  return data;
+}
 export async function getUserFights() {
+  const token = cookies().get("jwtToken")?.value;
+  console.log(token);
+
+  const userId = cookies().get("user_id")?.value;
+  console.log("USER ID IS: ", userId);
+
   const response = await fetch(
     `http://localhost:8000/api/fights?user.id=${
       cookies().get("user_id")?.value
-    }`
+    }`,
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    }
   );
   const data = await response.json();
   // console.log(data);

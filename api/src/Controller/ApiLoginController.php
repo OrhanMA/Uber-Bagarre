@@ -17,12 +17,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ApiLoginController extends AbstractController
 {
-    #[Route('/api/login', name: 'api_login', methods: ['POST'])]
+    #[Route('/api/login_check', name: 'api_login', methods: ['POST'])]
     public function index(#[CurrentUser] ?User $user, JWTTokenManagerInterface $JWTManager, Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
         $body = json_decode($request->getContent());
-
-
 
         $username = $body->username;
         $plainPassword = $body->password;

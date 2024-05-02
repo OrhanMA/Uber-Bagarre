@@ -22,7 +22,9 @@ export default async function FightDetails({
       <Suspense fallback={<FakeFightDetailsCard />}>
         <FightDetailsCard fight={fight} />
       </Suspense>
-      {/* {coordinates && <StaticMap coordinates={coordinates} />} */}
+      {coordinates && (
+        <StaticMap address={fight.address} coordinates={coordinates} />
+      )}
     </main>
   );
 }

@@ -1,3 +1,4 @@
+"use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -102,7 +103,7 @@ export default function CreateFightForm() {
       address = "unknown";
     }
 
-    // console.log(address);
+    console.log(address);
 
     const finalData = {
       ...values,

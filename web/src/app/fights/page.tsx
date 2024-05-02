@@ -1,12 +1,18 @@
 import { H1, H2 } from "@/components/typograhpy";
-import { getUserFights } from "../actions";
+import { getFights } from "../actions";
 import { FightData } from "@/types";
 import { FightCard } from "@/components/fight-card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import dynamic from "next/dynamic";
-export default async function Fights() {
-  const data = await getUserFights();
+import HydraPagination from "@/components/pagination";
+export default async function Fights({
+  searchParams,
+}: {
+  searchParams: { page: string };
+}) {
+  // const data = await getUserFights();
+  const page = searchParams.page || "1";
+  const data = await getFights(page);
   console.log(data);
 
   const fights = data["hydra:member"];
@@ -20,6 +26,11 @@ export default async function Fights() {
             {fights.map((fight: FightData) => {
               return <FightCard key={fight.id} fight={fight} />;
             })}
+            <HydraPagination
+              hydraView={data["hydra:view"]}
+              target="fights"
+              pageSliceOffset={17}
+            />
           </>
         ) : (
           <>

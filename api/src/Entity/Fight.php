@@ -12,14 +12,42 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
 
 
 #[ORM\Entity(repositoryClass: FightRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
+    // security: "is_granted('ROLE_USER')",
+    // operations: [
+    //     new Get(
+    //         security: "is_granted('ROLE_USER')",
+    //         securityMessage: 'Sorry, but you are not the Fight user or admin.'
+    //     ),
+    //     new GetCollection(
+    //         security: "is_granted('ROLE_USER')",
+    //         securityMessage: 'Sorry, but you are not the Fight user or admin.'
+    //     ),
+    //     new Put(
+    //         securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.user == user and previous_object.user == user)",
+    //         securityPostDenormalizeMessage: 'Sorry, but you are not the actual Fight user or admin.'
+    //     ),
+    //     new Patch(
+    //         securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.user == user and previous_object.user == user)",
+    //         securityPostDenormalizeMessage: 'Sorry, but you are not the actual Fight user or admin.'
+    //     ),
+    //     new Post(
+    //         security: "is_granted('ROLE_USER') or is_granted('ROLE_ADMIN')",
+    //         securityMessage: 'Only signed in users and admins can add books.'
+    //     )
+    // ]
 )]
-#[ApiFilter(SearchFilter::class, properties: ['user.id' => 'exact'])]
+// #[ApiFilter(SearchFilter::class, properties: ['user.id' => 'exact'])]
 class Fight
 {
     #[ORM\Id]
