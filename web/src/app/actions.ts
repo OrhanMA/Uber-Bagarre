@@ -77,7 +77,7 @@ export async function signup(values: {
 
 export async function getFighters(page: string) {
   const token = cookies().get("jwtToken")?.value;
-  // console.log("FROM FIGHTERS TOKEN: ", token);
+  console.log("FROM FIGHTERS TOKEN: ", token);
 
   const response = await fetch(
     "http://localhost:8000/api/fighters?page=" + page,

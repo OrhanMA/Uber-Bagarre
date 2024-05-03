@@ -111,8 +111,8 @@ export default function UpdateFightForm({ fight }: { fight: any }) {
                 <FormLabel>Fighters needed</FormLabel>
                 <FormControl>
                   <Input
-                    min={0}
-                    max={10}
+                    min="1"
+                    max="10"
                     defaultValue={1}
                     type="number"
                     placeholder=""
@@ -120,7 +120,7 @@ export default function UpdateFightForm({ fight }: { fight: any }) {
                   />
                 </FormControl>
                 <FormDescription>
-                  How many fighters your need (0-10)
+                  How many fighters you need (0-10)
                 </FormDescription>
                 <FormMessage />
               </FormItem>
